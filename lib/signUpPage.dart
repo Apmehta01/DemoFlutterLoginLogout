@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:demoflutterloginlogout/signUpPage.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,12 +10,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Login Demo',
+      title: 'SignUp',
       debugShowCheckedModeBanner: false,
-      routes: <String, WidgetBuilder>{
-        '/signUpPage': (BuildContext context) => new SignUpPage()
-      },
-      home: MainPage(),
+      home: SignUpPage(),
       theme: ThemeData(
         accentColor: Colors.white70,
       ),
@@ -24,82 +20,57 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MainPage extends StatefulWidget {
+class SignUpPage extends StatefulWidget {
   @override
-  _MainPageState createState() => _MainPageState();
+  _SignUpPageState createState() => _SignUpPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          headerSection(),
-          inputSection(),
-          buttonSection(),
-          bottomSection()
-        ],
+        children: [headerSection(), inputSection(), buttonSection()],
       ),
     );
   }
 
-  //Contains design of header section.
   Container headerSection() {
     return Container(
         margin: EdgeInsets.only(left: 20.0, right: 20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
           children: [
-            Text(
-              'Hello',
-              style: TextStyle(
-                  fontSize: 80.0,
-                  fontWeight: FontWeight.bold,
-                  shadows: [
-                    Shadow(
-                      offset: Offset(5.0, 5.0),
-                      blurRadius: 3.0,
-                      color: Colors.grey,
-                    ),
-                  ]),
+            Container(
+              child: Text(
+                'Signup',
+                style: TextStyle(
+                    fontSize: 80.0,
+                    fontWeight: FontWeight.bold,
+                    shadows: [
+                      Shadow(
+                        offset: Offset(5.0, 5.0),
+                        blurRadius: 3.0,
+                        color: Colors.grey,
+                      ),
+                    ]),
+              ),
             ),
-            Row(
-              children: [
-                Container(
-                  child: Text(
-                    'There',
-                    style: TextStyle(
-                        fontSize: 80.0,
-                        fontWeight: FontWeight.bold,
-                        shadows: [
-                          Shadow(
-                            offset: Offset(5.0, 5.0),
-                            blurRadius: 3.0,
-                            color: Colors.grey,
-                          ),
-                        ]),
-                  ),
-                ),
-                // SizedBox(width: 5.0,),
-                Container(
-                  child: Text(
-                    '.',
-                    style: TextStyle(
-                        fontSize: 80.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.lightBlue),
-                  ),
-                )
-              ],
+            Container(
+              margin: EdgeInsets.only(top: 30.0),
+              child: Text(
+                '.',
+                style: TextStyle(
+                    fontSize: 80.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.lightBlue),
+              ),
             )
           ],
         ));
   }
 
-  //Contains design of Textfield/Edittext section.
   Container inputSection() {
     return Container(
       margin: EdgeInsets.only(left: 10.0, right: 10.0),
@@ -132,22 +103,21 @@ class _MainPageState extends State<MainPage> {
             ),
             obscureText: true,
           ),
+          SizedBox(height: 20.0),
+          TextField(
+            decoration: InputDecoration(
+              labelText: 'NICK NAME',
+              labelStyle: TextStyle(
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.bold,
+                color: Colors.grey,
+              ),
+              focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.lightBlue)),
+            ),
+          ),
           SizedBox(
             height: 5.0,
-          ),
-          Container(
-            alignment: Alignment(1.0, 0.0),
-            padding: EdgeInsets.only(top: 15.0, left: 20.0),
-            child: InkWell(
-              child: Text(
-                'Forgot Password',
-                style: TextStyle(
-                    color: Colors.lightBlue,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Montserrat',
-                    decoration: TextDecoration.underline),
-              ),
-            ),
           ),
           SizedBox(height: 40.0)
         ],
@@ -155,7 +125,6 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  //Contains design of button section.
   Container buttonSection() {
     AssetImage assetImage = new AssetImage('assets/images/facebook.png');
     return Container(
@@ -173,7 +142,7 @@ class _MainPageState extends State<MainPage> {
                   onTap: () {},
                   child: Center(
                     child: Text(
-                      'LOGIN',
+                      'SIGN UP',
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -198,24 +167,16 @@ class _MainPageState extends State<MainPage> {
                   color: Colors.transparent,
                   borderRadius: BorderRadius.circular(20.0),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: ImageIcon(assetImage),
-                    ),
-                    SizedBox(
-                      height: 15.0,
-                    ),
-                    Center(
-                      child: Text(
-                        'Log in with facebook',
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Center(
+                    child: Text('Go Back',
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontFamily: 'Montserrat'),
-                      ),
-                    )
-                  ],
+                            fontFamily: 'Montserrat')),
+                  ),
                 ),
               ),
             ),
@@ -224,7 +185,6 @@ class _MainPageState extends State<MainPage> {
         ));
   }
 
-  //Contains design of bottom layout.
   Row bottomSection() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -237,9 +197,7 @@ class _MainPageState extends State<MainPage> {
           width: 5.0,
         ),
         InkWell(
-          onTap: () {
-            Navigator.of(context).pushNamed('/signUpPage');
-          },
+          onTap: () {},
           child: Text(
             'Register',
             style: TextStyle(

@@ -43,7 +43,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   //Contains design of header section.
-  Container headerSection() {
+  Widget headerSection() {
     return Container(
         margin: EdgeInsets.only(left: 20.0, right: 20.0),
         child: Row(
@@ -78,13 +78,13 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   //Contains design of Textfield/Edittext section.
-  Container inputSection() {
+  Widget inputSection() {
     return Container(
       margin: EdgeInsets.only(left: 10.0, right: 10.0),
       padding: EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
       child: Column(
         children: [
-          TextField(
+          TextFormField(
             controller: emailControler,
             decoration: InputDecoration(
               labelText: 'EMAIL',
@@ -99,7 +99,7 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
           ),
           SizedBox(height: 20.0),
-          TextField(
+          TextFormField(
             controller: passwordControler,
             decoration: InputDecoration(
               labelText: 'PASSWORD',
@@ -115,7 +115,7 @@ class _SignUpPageState extends State<SignUpPage> {
             obscureText: true,
           ),
           SizedBox(height: 20.0),
-          TextField(
+          TextFormField(
             controller: nickNameControler,
             decoration: InputDecoration(
               labelText: 'NICK NAME',
@@ -139,7 +139,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   //Contains design of button section.
-  Container buttonSection() {
+  Widget buttonSection() {
     return Container(
         margin: EdgeInsets.only(left: 75.0, right: 75.0),
         child: Column(
@@ -206,7 +206,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   //Contains design of bottom layout.
-  Row bottomSection() {
+  Widget bottomSection() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

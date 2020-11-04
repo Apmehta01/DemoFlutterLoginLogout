@@ -26,17 +26,23 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  TextEditingController emailControler = new TextEditingController();
+  TextEditingController passwordControler = new TextEditingController();
+  TextEditingController nickNameControler = new TextEditingController();
+  bool isEmail = false,isPassword=false,isNickName=false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [headerSection(), inputSection(), buttonSection()],
+      body: Center(
+        child: ListView(
+          shrinkWrap: true,
+          children: [headerSection(), inputSection(), buttonSection()],
+        ),
       ),
     );
   }
 
+  //Contains design of header section.
   Container headerSection() {
     return Container(
         margin: EdgeInsets.only(left: 20.0, right: 20.0),
@@ -71,6 +77,7 @@ class _SignUpPageState extends State<SignUpPage> {
         ));
   }
 
+  //Contains design of Textfield/Edittext section.
   Container inputSection() {
     return Container(
       margin: EdgeInsets.only(left: 10.0, right: 10.0),
@@ -78,8 +85,10 @@ class _SignUpPageState extends State<SignUpPage> {
       child: Column(
         children: [
           TextField(
+            controller: emailControler,
             decoration: InputDecoration(
               labelText: 'EMAIL',
+              errorText: isEmail ? 'Please enter valid E-Mail' : null,
               labelStyle: TextStyle(
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.bold,
@@ -91,8 +100,10 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
           SizedBox(height: 20.0),
           TextField(
+            controller: passwordControler,
             decoration: InputDecoration(
               labelText: 'PASSWORD',
+              errorText: isPassword ? 'Please enter valid Password' : null,
               labelStyle: TextStyle(
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.bold,
@@ -105,8 +116,10 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
           SizedBox(height: 20.0),
           TextField(
+            controller: nickNameControler,
             decoration: InputDecoration(
               labelText: 'NICK NAME',
+              errorText: isNickName ? 'Please enter valid Nickname' : null,
               labelStyle: TextStyle(
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.bold,
@@ -125,8 +138,8 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
+  //Contains design of button section.
   Container buttonSection() {
-    AssetImage assetImage = new AssetImage('assets/images/facebook.png');
     return Container(
         margin: EdgeInsets.only(left: 75.0, right: 75.0),
         child: Column(
@@ -138,8 +151,15 @@ class _SignUpPageState extends State<SignUpPage> {
                 shadowColor: Colors.lightBlueAccent,
                 color: Colors.lightBlue,
                 elevation: 7.0,
-                child: GestureDetector(
-                  onTap: () {},
+                child: OutlineButton(
+                  shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                  onPressed: () {
+                    setState(() {
+                      emailControler.text.isEmpty ? isEmail = true : isEmail = false;
+                      passwordControler.text.isEmpty ? isPassword= true : isPassword = false;
+                      nickNameControler.text.isEmpty ? isNickName= true : isNickName = false;
+                    });
+                  },
                   child: Center(
                     child: Text(
                       'SIGN UP',
@@ -185,6 +205,7 @@ class _SignUpPageState extends State<SignUpPage> {
         ));
   }
 
+  //Contains design of bottom layout.
   Row bottomSection() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

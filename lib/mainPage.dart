@@ -1,12 +1,18 @@
 import 'dart:ui';
 import 'package:demoflutterloginlogout/signUpPage.dart';
 import 'package:flutter/material.dart';
+import 'package:demoflutterloginlogout/model/loginPostRequest.dart';
+import 'dart:convert';
+import 'dart:async';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(new MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  final Future post;
+  MyApp({Key key, this.post}) : super(key: key);
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -30,19 +36,24 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  static final CREATE_POST_URL = 'http://reqres.in/api/login';
+  TextEditingController emailControler = new TextEditingController();
+  TextEditingController passwordControler = new TextEditingController();
+  bool isEmail = false,isPassword=false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          headerSection(),
-          inputSection(),
-          buttonSection(),
-          bottomSection()
-        ],
-      ),
+      body: Center(
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            headerSection(),
+            inputSection(),
+            buttonSection(),
+            bottomSection(),
+          ],
+        ),
+      )
     );
   }
 
@@ -101,14 +112,17 @@ class _MainPageState extends State<MainPage> {
 
   //Contains design of Textfield/Edittext section.
   Container inputSection() {
+
     return Container(
       margin: EdgeInsets.only(left: 10.0, right: 10.0),
       padding: EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
       child: Column(
         children: [
           TextField(
+            controller: emailControler,
             decoration: InputDecoration(
               labelText: 'EMAIL',
+              errorText: isEmail ? 'Please enter valid E-Mail' : null,
               labelStyle: TextStyle(
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.bold,
@@ -120,8 +134,10 @@ class _MainPageState extends State<MainPage> {
           ),
           SizedBox(height: 20.0),
           TextField(
+            controller: passwordControler,
             decoration: InputDecoration(
               labelText: 'PASSWORD',
+              errorText: isPassword ? 'Please enter valid Password' : null,
               labelStyle: TextStyle(
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.bold,
@@ -163,14 +179,22 @@ class _MainPageState extends State<MainPage> {
         child: Column(
           children: [
             Container(
-              height: 40.0,
+                height: 40.0,
               child: Material(
                 borderRadius: BorderRadius.circular(20.0),
                 shadowColor: Colors.lightBlueAccent,
                 color: Colors.lightBlue,
                 elevation: 7.0,
-                child: GestureDetector(
-                  onTap: () {},
+                child: OutlineButton(
+                  shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
+                  onPressed: ()async {
+                    debugPrint('BUTTON CLICKED:>>>>>>> 1');
+                    setState(() {
+                      emailControler.text.isEmpty ? isEmail = true : isEmail = false;
+                      passwordControler.text.isEmpty ? isPassword= true : isPassword = false;
+                    });
+                    performLogin(emailControler,passwordControler);
+                  },
                   child: Center(
                     child: Text(
                       'LOGIN',
@@ -214,7 +238,7 @@ class _MainPageState extends State<MainPage> {
                             fontWeight: FontWeight.bold,
                             fontFamily: 'Montserrat'),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -248,8 +272,20 @@ class _MainPageState extends State<MainPage> {
                 fontWeight: FontWeight.bold,
                 decoration: TextDecoration.underline),
           ),
-        )
+        ),
       ],
     );
+  }
+
+  Future<void> performLogin([TextEditingController emailControler,TextEditingController passwordControler])
+  async {
+    /*Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text("Sending Message"),
+    ));*/
+    Post newPost = new Post(sEmail: emailControler.text, sPassword: passwordControler.text);
+    Post p = await newPost.createPost(context,CREATE_POST_URL,
+        body: newPost.toMap());
+    print(p.sEmail);
+    debugPrint('BUTTON CLICKED:>>>>>>> 2');
   }
 }

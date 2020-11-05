@@ -1,6 +1,6 @@
 import 'dart:ui';
-import 'package:demoflutterloginlogout/signUpPage.dart';
 import 'package:flutter/material.dart';
+import 'signUpPage.dart';
 import 'package:demoflutterloginlogout/model/loginPostRequest.dart';
 import 'dart:async';
 
@@ -10,14 +10,12 @@ void main() {
 
 class MyApp extends StatelessWidget {
   final Future post;
-
   MyApp({Key key, this.post}) : super(key: key);
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Login Demo',
+      title: 'Exploring the Flutter',
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
         '/signUpPage': (BuildContext context) => new SignUpPage()
@@ -345,4 +343,6 @@ class _MainPageState extends State<MainPage> {
       debugPrint('ERROR:>>>>>>> 1');
     return null;
   }
+
+
 }

@@ -1,12 +1,15 @@
 import 'dart:ui';
+import 'package:demoflutterloginlogout/app_screens/loginPage.dart';
+import 'package:demoflutterloginlogout/model/jobModel.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MyHomescreen());
 }
 
-class MyApp extends StatelessWidget {
+class MyHomescreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,7 +19,10 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text("Dashboard"),
         ),
-        body: getBasicListview(),
+        drawer: setUpDrawer(context),
+        body:  Center(
+          child: JobsListView()
+        ),
       ),
     );
   }
@@ -58,5 +64,73 @@ class MyApp extends StatelessWidget {
       ],
     );
     return listview;
+  }
+  Widget setUpDrawer(BuildContext context){
+    return Drawer(
+      // Add a ListView to the drawer. This ensures the user can scroll
+      // through the options in the drawer if there isn't enough vertical
+      // space to fit everything.
+      child: ListView(
+        // Important: Remove any padding from the ListView.
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          DrawerHeader(
+            child: Text('Drawer Header'),
+            decoration: BoxDecoration(
+              color: Colors.blue,
+            ),
+          ),
+          ListTile(
+            title: Text('Logout'),
+            onTap: () {
+              // Update the state of the app
+              // ...
+              // Then close the drawer
+              // Navigator.pop(context);
+              showLogoutDialog(context);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  void showLogoutDialog(BuildContext context) {
+    AlertDialog alert;
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed:  () {
+        Navigator.pop(context, false);
+      },
+    );
+    Widget okButton = FlatButton(
+      child: Text("OK"),
+      onPressed:  () async {
+        Navigator.pop(context, true);
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.remove('token');
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (BuildContext ctx) => LoginPage()));
+      },
+    );
+
+    // set up the AlertDialog
+    alert = AlertDialog(
+      title: Text("Logout"),
+      content: Text("Are you sure want to Logout?"),
+      actions: [
+        cancelButton,
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

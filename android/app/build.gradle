@@ -43,8 +43,10 @@ android {
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        /*ndk {
+            abiFilters 'armeabi-v7a', 'x86', 'armeabi'
+        }*/
     }
-
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.

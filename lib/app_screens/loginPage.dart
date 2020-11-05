@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:demoflutterloginlogout/app_screens/homeScreen.dart';
 import 'package:flutter/material.dart';
 import 'signUpPage.dart';
 import 'package:demoflutterloginlogout/model/loginPostRequest.dart';
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/signUpPage': (BuildContext context) => new SignUpPage()
       },
-      home: MainPage(),
+      home: LoginPage(),
       theme: ThemeData(
         accentColor: Colors.white70,
       ),
@@ -28,12 +29,12 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MainPage extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   @override
-  _MainPageState createState() => _MainPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _LoginPageState extends State<LoginPage> {
   static final CREATE_POST_URL = 'https://reqres.in/api/register';
   TextEditingController emailControler = new TextEditingController();
   TextEditingController passwordControler = new TextEditingController();
@@ -192,6 +193,10 @@ class _MainPageState extends State<MainPage> {
                   onPressed: () async {
                     debugPrint('BUTTON CLICKED:>>>>>>> 1');
                     setState(() {
+/*                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (BuildContext context) => MyHomescreen()),
+                              (Route<dynamic> route) => false);*/
+
                       performLogin(emailControler, passwordControler);
                       emailControler.text.isEmpty
                           ? isEmail = true
@@ -284,6 +289,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   Future<void> performLogin(
+
       [TextEditingController emailControler,
       TextEditingController passwordControler]) async {
     String email = emailControler.text;

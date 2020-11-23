@@ -1,29 +1,23 @@
+import 'dart:convert';
 import 'dart:ui';
-import 'package:demoflutterloginlogout/app_screens/homeScreen.dart';
 import 'package:flutter/material.dart';
-import 'signUpPage.dart';
 import 'package:demoflutterloginlogout/model/loginPostRequest.dart';
 import 'dart:async';
+import 'package:progress_dialog/progress_dialog.dart';
 
 void main() {
-  runApp(new MyApp());
+  runApp(new LoginScreen());
 }
 
-class MyApp extends StatelessWidget {
+class LoginScreen extends StatelessWidget {
   final Future post;
-  MyApp({Key key, this.post}) : super(key: key);
+  LoginScreen({Key key, this.post}) : super(key: key);
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Exploring the Flutter',
-      debugShowCheckedModeBanner: false,
-      routes: <String, WidgetBuilder>{
-        '/signUpPage': (BuildContext context) => new SignUpPage()
-      },
-      home: LoginPage(),
-      theme: ThemeData(
-        accentColor: Colors.white70,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Exploring the Flutter'),
       ),
     );
   }
@@ -39,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController emailControler = new TextEditingController();
   TextEditingController passwordControler = new TextEditingController();
   bool isEmail = false, isPassword = false;
-
+  ProgressDialog progressdialog;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +50,10 @@ class _LoginPageState extends State<LoginPage> {
     ));
   }
 
-  //Contains design of header section.
+  /**
+   * Name : headerSection
+   * <br> Purpose : This method contains design of header section.
+   */
   Widget headerSection() {
     return Container(
         margin: EdgeInsets.only(left: 20.0, right: 20.0),
@@ -109,7 +106,10 @@ class _LoginPageState extends State<LoginPage> {
         ));
   }
 
-  //Contains design of Textfield/Edittext section.
+  /**
+   * Name : inputSection
+   * <br> Purpose :This method contains ontains design of Textfield/Edittext section.
+   */
   Widget inputSection() {
     return Container(
       margin: EdgeInsets.only(left: 10.0, right: 10.0),
@@ -121,6 +121,7 @@ class _LoginPageState extends State<LoginPage> {
             // onSaved: (String val) {
             //   var _email = val;
             // },
+            autofocus: false,
             controller: emailControler,
             decoration: InputDecoration(
               labelText: 'EMAIL',
@@ -136,6 +137,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           SizedBox(height: 20.0),
           TextFormField(
+            autofocus: false,
             controller: passwordControler,
             decoration: InputDecoration(
               labelText: 'PASSWORD',
@@ -173,7 +175,10 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  //Contains design of button section.
+  /**
+   * Name : buttonSection
+   * <br> Purpose : contains design of button section.
+   */
   Widget buttonSection() {
     AssetImage assetImage = new AssetImage('assets/images/facebook.png');
     return Container(
@@ -193,7 +198,7 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () async {
                     debugPrint('BUTTON CLICKED:>>>>>>> 1');
                     setState(() {
-/*                      Navigator.of(context).pushAndRemoveUntil(
+                      /*Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(builder: (BuildContext context) => MyHomescreen()),
                               (Route<dynamic> route) => false);*/
 
@@ -259,7 +264,10 @@ class _LoginPageState extends State<LoginPage> {
         ));
   }
 
-  //Contains design of bottom layout.
+  /**
+   * Name : headerSection
+   * <br> Purpose : contains design of bottom section.
+   */
   Widget bottomSection() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -273,7 +281,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         InkWell(
           onTap: () {
-            Navigator.of(context).pushNamed('/signUpPage');
+            Navigator.of(context).pushNamed('/signupscreen');
           },
           child: Text(
             'Register',
@@ -288,57 +296,40 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  /**
+   * Name : performLogin
+   * <br> Purpose : contains logic of login.
+   */
   Future<void> performLogin(
-
       [TextEditingController emailControler,
       TextEditingController passwordControler]) async {
+    showProgressDialog();
     String email = emailControler.text;
     String pass = passwordControler.text;
     LoginPostRequest loginPostRequest = LoginPostRequest();
-    loginPostRequest.performLogin(context, email, pass, CREATE_POST_URL);
-/*    String email=emailControler.text;
-    String pass=passwordControler.text;
-    final uri = CREATE_POST_URL;
-    final headers = {'Content-Type': 'application/json'};
-    Map<String, dynamic> body = {'email': email, 'password': pass};
-    String jsonBody = json.encode(body);
-    final encoding = Encoding.getByName('utf-8');
-    http.Response response = await http.post(
-      uri,
-      headers:headers,
-      body: jsonBody,
-      encoding: encoding,
-    );
-    int statusCode = response.statusCode;
-    String responseBody = response.body;
-    if (statusCode < 200 || statusCode >= 400 || json == null) {
-      debugPrint('BUTTON CLICKED:>>>>>>> 2'+ responseBody.toString());
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        action: SnackBarAction(
-          label: 'Okie',
-          onPressed: (){
-            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          },
-        ),
-        content: Text("Login Failed"),
-      ));
-      throw new Exception("Error while fetching data");
-    }else if(statusCode==200){
-      debugPrint('BUTTON CLICKED:>>>>>>> 3'+ responseBody.toString());
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        action: SnackBarAction(
-          label: 'Okie',
-          onPressed: (){
-            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          },
-        ),
-        content: Text("Login Sucess"),
-      ));
-    }*/
+    loginPostRequest.performLogin(context, email, pass, CREATE_POST_URL,progressdialog);
   }
 
-  //Method is for validating E-Mail
-  String validateEmail(String value) {
+  /**
+   * Name : showProgressBar
+   * <br> Purpose : This method is for showing progressDialog.
+   */
+  showProgressDialog(){
+    progressdialog = new ProgressDialog(context);
+    progressdialog.style(
+      message: 'Loading.....',
+      progressWidget: Transform.scale(
+        scale: 0.5,
+        child:CircularProgressIndicator(
+        ),
+      ),
+      insetAnimCurve: Curves.easeInOut,
+    );
+    progressdialog.show();
+  }
+}
+
+/*String validateEmail(String value) {
     Pattern pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     RegExp regex = new RegExp(pattern);
@@ -348,7 +339,4 @@ class _LoginPageState extends State<LoginPage> {
     } else
       debugPrint('ERROR:>>>>>>> 1');
     return null;
-  }
-
-
-}
+  }*/

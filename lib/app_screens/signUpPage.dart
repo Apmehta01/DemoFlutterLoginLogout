@@ -41,8 +41,10 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
     );
   }
-
-  //Contains design of header section.
+  /**
+   * Name : headerSection
+   * <br> Purpose : This method contains design of header section.
+   */
   Widget headerSection() {
     return Container(
         margin: EdgeInsets.only(left: 20.0, right: 20.0),
@@ -77,7 +79,10 @@ class _SignUpPageState extends State<SignUpPage> {
         ));
   }
 
-  //Contains design of Textfield/Edittext section.
+  /**
+   * Name : inputSection
+   * <br> Purpose :This method contains ontains design of Textfield/Edittext section.
+   */
   Widget inputSection() {
     return Container(
       margin: EdgeInsets.only(left: 10.0, right: 10.0),
@@ -138,7 +143,10 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  //Contains design of button section.
+  /**
+   * Name : buttonSection
+   * <br> Purpose : contains design of button section.
+   */
   Widget buttonSection() {
     return Container(
         margin: EdgeInsets.only(left: 75.0, right: 75.0),
@@ -205,7 +213,10 @@ class _SignUpPageState extends State<SignUpPage> {
         ));
   }
 
-  //Contains design of bottom layout.
+  /**
+   * Name : headerSection
+   * <br> Purpose : contains design of bottom section.
+   */
   Widget bottomSection() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

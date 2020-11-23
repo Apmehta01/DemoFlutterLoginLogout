@@ -1,86 +1,39 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-
 class Job {
   final int id;
-  final String position;
-  final String company;
-  final String description;
+  final String name;
+  final String email;
+  final String phone;
+  final String city;
+  final String website;
+  final Address address;
 
-  Job({this.id, this.position, this.company, this.description});
+  Job({this.id, this.name, this.email, this.phone,this.city,this.website,this.address});
 
   factory Job.fromJson(Map<String, dynamic> json) {
     return Job(
       id: json['id'],
-      position: json['position'],
-      company: json['company'],
-      description: json['description'],
+      name: json['name'],
+      email: json['email'],
+      phone: json['phone'],
+      city: json['city'],
+      website: json['website'],
+      address: Address.fromJson(
+        json['address'],
+      ),
     );
   }
 }
 
-class JobsListView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<List<Job>>(
-      future: getJobList(context),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          List<Job> jobList = snapshot.data;
-          return setUpListview(jobList);
-        } else if (snapshot.hasError) {
-          return Text("${snapshot.error}");
-        }
-        return CircularProgressIndicator();
-      },
+class Address {
+  final String city;
+
+  Address({
+    this.city,
+  });
+
+  static Address fromJson(dynamic json) {
+    return Address(
+      city: json["city"],
     );
   }
-
-  // getting data from server
-  Future<List<Job>> getJobList(BuildContext context) async {
-    final jobListAPIURL = 'https://mock-json-service.glitch.me/';
-    final response = await http.get(jobListAPIURL);
-
-    if (response.statusCode == 200) {
-      List jobResponse = json.decode(response.body);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          'Loading Job Data Sucess.'
-        ),
-      ));
-      return jobResponse.map((job) => new Job.fromJson(job)).toList();
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-            'Loading Job Data Failed!!'
-        ),
-      ));
-      throw Exception('Failed to load jobs from API');
-    }
-  }
-
-  ListView setUpListview(List<Job> jobList) {
-    return ListView.builder(
-        itemCount: jobList.length,
-        itemBuilder: (context, index) {
-          return setUpTitle(jobList[index].position, jobList[index].company, Icons.work);
-        });
-  }
-
-  ListTile setUpTitle(String title, String subtitle, IconData icon) =>
-      ListTile(
-        title: Text(title,
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 20,
-            )),
-        subtitle: Text(subtitle),
-        leading: Icon(
-          icon,
-          color: Colors.blue[500],
-        ),
-      );
 }

@@ -37,17 +37,25 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-      child: ListView(
-        shrinkWrap: true,
-        children: [
-          headerSection(),
-          inputSection(),
-          buttonSection(),
-          bottomSection(),
-        ],
-      ),
-    ));
+        body: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onPanDown: (_) {
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: Center(
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                headerSection(),
+                inputSection(),
+                buttonSection(),
+                bottomSection(),
+              ],
+            ),
+          )
+        ),
+      resizeToAvoidBottomPadding: false,
+    );
   }
 
   /**

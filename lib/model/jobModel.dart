@@ -1,3 +1,6 @@
+import 'package:json_annotation/json_annotation.dart';
+part 'jobModel.g.dart';
+@JsonSerializable()
 class Job {
   final int id;
   final String name;
@@ -9,7 +12,10 @@ class Job {
 
   Job({this.id, this.name, this.email, this.phone,this.city,this.website,this.address});
 
-  factory Job.fromJson(Map<String, dynamic> json) {
+  factory Job.fromJson(Map<String, dynamic> json)=>_$JobFromJson(json);
+  Map<String,dynamic>toJson()=>_$JobToJson(this);
+
+ /* factory Job.fromJson(Map<String, dynamic> json) {
     return Job(
       id: json['id'],
       name: json['name'],
@@ -21,19 +27,20 @@ class Job {
         json['address'],
       ),
     );
-  }
+  }*/
 }
-
+@JsonSerializable()
 class Address {
   final String city;
 
   Address({
     this.city,
   });
-
-  static Address fromJson(dynamic json) {
+  factory Address.fromJson(Map<String, dynamic> json)=>_$AddressFromJson(json);
+  Map<String,dynamic>toJson()=>_$AddressToJson(this);
+  /*static Address fromJson(dynamic json) {
     return Address(
       city: json["city"],
     );
-  }
+  }*/
 }

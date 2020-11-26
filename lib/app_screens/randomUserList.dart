@@ -1,41 +1,31 @@
-import 'dart:convert';
-import 'package:demoflutterloginlogout/model/randomAPIModel.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:demoflutterloginlogout/model/jobModel.dart';
+import 'package:demoflutterloginlogout/network/RestClient.dart';
+import 'package:demoflutterloginlogout/utils/Const.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/widgets.dart';
+import 'dart:async';
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 
-class RandomUserList extends StatefulWidget {
+class JobsListView extends StatefulWidget {
   final String title;
-
-  const RandomUserList({Key key, this.title}) : super(key: key);
-
+  const JobsListView({Key key, this.title}) : super(key: key);
   @override
-  _RandomUserListState createState() => _RandomUserListState();
+  _JobListViewState createState() => _JobListViewState();
 }
 
-class _RandomUserListState extends State<RandomUserList> {
+class _JobListViewState extends State<JobsListView> {
   TextEditingController _textController = TextEditingController();
-  List<RandomAPIModel> randomUserList = List<RandomAPIModel>();
-  List<RandomAPIModel> searchResultList = List<RandomAPIModel>();
+  List<Job> jobList=List<Job>();
+  List<Job> searchResultList=List<Job>();
   Future _future;
-  bool noMatchFound = false;
-  List userResponse = new List();
-  ProgressDialog progressdialog;
-
-  //Pagination
-  static int page = 1;
-  final dio = new Dio();
-
+  bool noMatchFound=false;
   @override
   void initState() {
-    _future = getRandomUser(context, page);
     super.initState();
+    final client=RestClient(Dio(BaseOptions(contentType: "application/json")));
+    _future = client.getTasks();
   }
-
   @override
   void dispose() {
     // Clean up the controller when the widget is removed from the
@@ -46,99 +36,66 @@ class _RandomUserListState extends State<RandomUserList> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: Padding(
-        padding: EdgeInsets.zero,
-        child: Container(
-          height: 45.0,
-          width: 45.0,
-          child: FloatingActionButton(
-            tooltip: "Reload",
-            child: Icon(Icons.refresh, color: Colors.white, size: 25.0),
-            onPressed: () {
-              setState(() {
-                page = 0;
-                _future = getRandomUser(context, page);
-                getFutureBuilder(_future);
-              });
-            },
-          ),
-        ),
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onPanDown: (_) {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Center(
+        child: getFutureBuilder(context),
       ),
-      body: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onPanDown: (_) {
-          FocusScope.of(context).requestFocus(FocusNode());
-        },
-        child: Center(
-          child: getFutureBuilder(_future),
-        ),
-      ),
-      resizeToAvoidBottomPadding: false,
     );
-  }
-
-  /**
-   * Name : getRandomUser
-   * <br> Purpose : This method is for getting data from server.
-   */
-  Future<List<RandomAPIModel>> getRandomUser(
-      BuildContext context, int pageNumber) async {
-    showProgressDialog();
-    // final jobListAPIURL = 'https://randomuser.me/api/?results=10';
-    final jobListAPIURL = "https://randomuser.me/api/?page=" +
-        pageNumber.toString() +
-        "&results=11&seed=abc";
-    // final response = await http.get(jobListAPIURL);
-    final response = await dio.get(jobListAPIURL);
-    debugPrint('URL:>>>>>>> ' + jobListAPIURL);
-    if (response.statusCode == 200) {
-      for (int i = 0; i < response.data['results'].length; i++) {
-        userResponse.add(response.data['results'][i]);
-        debugPrint('DATA:>>>>>>> ' + response.data['results'][i].toString());
-      }
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        duration: const Duration(seconds: 2),
-        content: Text('Adding data Sucess.'),
-      ));
-      return userResponse
-          .map((randomapimodel) => RandomAPIModel.fromJson(randomapimodel))
-          .toList();
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Error while adding the data!!'),
-      ));
-      throw Exception('Failed to load data from API!!');
-    }
   }
 
   /**
    * Name : getFutureBuilder
    * <br> Purpose : This method contains loginc of Future builder.
    */
-  Widget getFutureBuilder(Future future) {
-    return FutureBuilder<List<RandomAPIModel>>(
-        future: _future,
-        builder: (context, snapshot) {
+  FutureBuilder<List<Job>> getFutureBuilder(BuildContext context) {
+    return FutureBuilder<List<Job>>(
+      future:_future,
+      builder: (context, snapshot) {
+        if(snapshot.connectionState==ConnectionState.done){
           if (snapshot.hasData) {
-            print("SNAP SIZE:>>>>>>>" + snapshot.data.length.toString());
-            randomUserList = List.from(snapshot.data);
-            return setUpRandomUserListWithSearch(randomUserList);
+            jobList = List.from(snapshot.data);
+            return setUpJobListWithSearch(jobList);
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
+        }else{
           return CircularProgressIndicator.adaptive();
-        });
+        }
+      },
+    );
+  }
+  /**
+   * Name : getJobList
+   * <br> Purpose : This method is for getting data from server.
+   */
+  Future<List<Job>> getJobList(BuildContext context) async {
+    final jobListAPIURL = 'https://jsonplaceholder.typicode.com/users';
+    final response = await http.get(jobListAPIURL);
+    if (response.statusCode == 200) {
+      List jobResponse = json.decode(response.body);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Loading Data Sucess.'),
+      ));
+      return jobResponse.map((job) => new Job.fromJson(job)).toList();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Loading Data Failed!!'),
+      ));
+      throw Exception('Failed to load data from API');
+    }
   }
 
   /**
-   * Name : setUpRandomUserListWithSearch
+   * Name : setUpJobListWithSearch
    * <br> Purpose : This method will sets up listview.
    */
-  Widget setUpRandomUserListWithSearch(List<RandomAPIModel> randomUserList) {
-    debugPrint('SIZE:>>>>>>> ' + randomUserList.length.toString());
+  Widget setUpJobListWithSearch(List<Job> jobList) {
     return Container(
-      margin: EdgeInsets.only(left: 10.0, right: 10.0),
+      margin: EdgeInsets.only(left: 10.0,right: 10.0),
       child: Column(
         children: [
           Padding(
@@ -146,7 +103,7 @@ class _RandomUserListState extends State<RandomUserList> {
             child: TextField(
               controller: _textController,
               decoration: InputDecoration(
-                hintText: 'Search name here...',
+                hintText: 'Search Name Here...',
               ),
               onChanged: (value) {
                 setState(() {
@@ -155,92 +112,46 @@ class _RandomUserListState extends State<RandomUserList> {
               }, // onChanged: onItemChanged,
             ),
           ),
-          Expanded(child: displayDataIntoListView())
+          Expanded(
+              child: showDataInToListView()
+          )
         ],
       ),
     );
   }
 
   /**
-   * Name : displayDataIntoListView
+   * Name : showDataInToListView
    * <br> Purpose : This method will showcase data inside the listview.
    */
-  displayDataIntoListView() {
-    if (noMatchFound) {
+  showDataInToListView() {
+    if(noMatchFound){
       return Center(
-        child: Text(
-          'No Match Found!!!!!',
-          style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-        ),
+        child:Text(
+          'No Match Found',
+          style: TextStyle(
+              fontSize: 15.0
+          ),
+        ) ,
       );
-    } else {
+    }else{
       return searchResultList.length != 0 || _textController.text.isNotEmpty
-          ? ListView.builder(
-              itemCount: searchResultList.length,
-              itemBuilder: (context, index) {
-                String name = /*index.toString()+". "+*/ searchResultList[index]
-                        .name
-                        .first +
-                    " " +
-                    searchResultList[index].name.last;
-                return setUpTitle(
-                    index,
-                    name,
-                    searchResultList[index].gender,
-                    searchResultList[index].email,
-                    searchResultList[index].phone,
-                    searchResultList[index].location.city,
-                    searchResultList[index].location.country,
-                    searchResultList[index].picture.large,
-                    searchResultList[index].dob.age.toString());
-              })
-          : ListView.builder(
-              itemCount: randomUserList.length + 1,
-              itemBuilder: (context, index) {
-                if (index == randomUserList.length) {
-                  return Center(
-                      child: Container(
-                    margin: EdgeInsets.only(bottom: 20.0, top: 10.0),
-                    width: 170.0,
-                    height: 40.0,
-                    child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: Colors.lightBlueAccent)),
-                      color: Colors.lightBlueAccent,
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        "Load More",
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          page++;
-                          _future = getRandomUser(context, page);
-                        });
-                      },
-                    ),
-                  ));
-                } else {
-                  String name = index.toString() +
-                      ". " +
-                      randomUserList[index].name.first +
-                      " " +
-                      randomUserList[index].name.last;
-                  print("LIST COME:>>>>>>>");
-                  return setUpTitle(
-                      index,
-                      name,
-                      randomUserList[index].gender,
-                      randomUserList[index].email,
-                      randomUserList[index].phone,
-                      randomUserList[index].location.city,
-                      randomUserList[index].location.country,
-                      randomUserList[index].picture.large,
-                      randomUserList[index].dob.age.toString());
-                }
-              });
+          ? new ListView.builder(
+        itemCount: searchResultList.length,
+        itemBuilder: (context,index){
+          return setUpTitle(searchResultList[index].name,
+              searchResultList[index].email,jobList[index].phone,
+              searchResultList[index].address.city,
+              searchResultList[index].website ,Icons.person);
+        },
+      ):new ListView.builder(
+          itemCount: jobList.length,
+          itemBuilder: (context,index){
+            return setUpTitle(jobList[index].name,
+                jobList[index].email,jobList[index].phone,jobList[index].address.city,
+                jobList[index].website, Icons.person);
+          }
+      );
     }
   }
 
@@ -248,77 +159,28 @@ class _RandomUserListState extends State<RandomUserList> {
    * Name : setUpTitle
    * <br> Purpose : This method will sets up listtitle of listview.
    */
-  Widget setUpTitle(int index, String name, String gender, String email,
-      String phone, String city, String country, String picture, String age) {
-    progressdialog.hide();
-    return Card(
-      elevation: 1.5,
-      margin: EdgeInsets.only(top: 7.0, bottom: 7.0),
-      child: ListTile(
-          onTap: () {
-            openRandomUserInformationDialog(picture, name, email, phone, city);
-          },
-          title: Container(
-            width: double.infinity,
-            margin: EdgeInsets.only(top: 5.0, bottom: 5.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                        color: Colors.lightBlue,
-                        image: DecorationImage(image: NetworkImage(picture))),
-                  ),
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(
-                        width: MediaQuery.of(context).size.width - 140,
-                        child: Text(
-                          name,
-                          style: TextStyle(fontSize: 17),
-                        )),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          gender,
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        SizedBox(
-                          width: 20.0,
-                        ),
-                        Text(
-                          age,
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                  ],
-                )
-              ],
-            ),
-          )),
-    );
-  }
+  ListTile setUpTitle(String name, String email,String phone,String city,
+      String website, IconData icon) => ListTile(
+    title: Text(name,
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 20,
+        )),
+    subtitle: Text(email),
+    leading: Icon(
+      icon,
+      color: Colors.blue[500],
+    ),
+    onTap: (){
+      openUserInformationDialog(name,email,phone,website,city);
+    },
+  );
 
   /**
-   * Name : openRandomUserInformationDialog
+   * Name : openUserInformationDialog
    * <br> Purpose : This method is will open dialog on listview click for showing information of the user.
    */
-  openRandomUserInformationDialog(
-      String picture, String name, String email, String phone, String city) {
+  openUserInformationDialog(String name, String email,String phone,String website,String city) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -333,27 +195,13 @@ class _RandomUserListState extends State<RandomUserList> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
-                    width: 150,
-                    height: 150,
-                    decoration: BoxDecoration(
-                        color: Colors.lightBlue,
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                            fit: BoxFit.contain, image: NetworkImage(picture))),
-                  ),
-                  SizedBox(
-                    height: 5.0,
-                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Text(
-                        '${name}',
-                        style: TextStyle(
-                            fontSize: 24.0, fontWeight: FontWeight.bold),
+                        'Employee Details',
+                        style: TextStyle(fontSize: 24.0,fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -363,34 +211,49 @@ class _RandomUserListState extends State<RandomUserList> {
                   Divider(
                     color: Colors.grey,
                     height: 5.0,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 10.0, right: 10.0, top: 10.0, bottom: 10.0),
+                  ),Container(
+                    margin: EdgeInsets.only(left: 10.0,right: 10.0,top: 15.0,bottom: 15.0),
                     child: Column(
                       children: [
                         Text(
+                          'Name: ${name}',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              fontSize: 15.0
+                          ),
+                        ),SizedBox(
+                          height: 5.0,
+                        ),Text(
                           'E-Mail: ${email}',
                           textAlign: TextAlign.start,
-                          style: TextStyle(fontSize: 15.0),
-                        ),
-                        SizedBox(
+                          style: TextStyle(
+                              fontSize: 15.0
+                          ),
+                        ),SizedBox(
                           height: 5.0,
-                        ),
-                        Text(
+                        ),Text(
+                          'Website: ${website}',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              fontSize: 15.0
+                          ),
+                        ),SizedBox(
+                          height: 5.0,
+                        ),Text(
                           'Phone: ${phone}',
                           textAlign: TextAlign.start,
-                          style: TextStyle(fontSize: 15.0),
-                        ),
-                        SizedBox(
+                          style: TextStyle(
+                              fontSize: 15.0
+                          ),
+                        ),SizedBox(
                           height: 5.0,
-                        ),
-                        Text(
+                        ),Text(
                           'City: ${city}',
                           textAlign: TextAlign.start,
-                          style: TextStyle(fontSize: 15.0),
-                        ),
-                        SizedBox(
+                          style: TextStyle(
+                              fontSize: 15.0
+                          ),
+                        ),SizedBox(
                           height: 15.0,
                         ),
                       ],
@@ -410,38 +273,23 @@ class _RandomUserListState extends State<RandomUserList> {
   onSearchTextChanged(String text) async {
     searchResultList.clear();
     if (text.isEmpty) {
-      setState(() {});
+      setState(() {
+
+      });
       return;
     }
 
-    randomUserList.forEach((randomUser) {
-      if (randomUser.name.first.toLowerCase().trim().contains(text) ||
-          randomUser.name.last.toLowerCase().trim().contains(text))
-        searchResultList.add(randomUser);
+    jobList.forEach((job) {
+      if (job.name.toLowerCase().contains(text))
+        searchResultList.add(job);
     });
     setState(() {
-      if (searchResultList.length == 0) {
-        noMatchFound = true;
-      } else {
-        noMatchFound = false;
+      debugPrint('SIZE:>>>>>>> '+searchResultList.length.toString());
+      if(searchResultList.length==0){
+        noMatchFound=true;
+      }else{
+        noMatchFound=false;
       }
     });
-  }
-
-  /**
-   * Name : showProgressBar
-   * <br> Purpose : This method is for showing progressDialog.
-   */
-  showProgressDialog() {
-    progressdialog = new ProgressDialog(context);
-    progressdialog.style(
-      message: 'Adding data.....',
-      progressWidget: Transform.scale(
-        scale: 0.5,
-        child: CircularProgressIndicator(),
-      ),
-      insetAnimCurve: Curves.easeInOut,
-    );
-    progressdialog.show();
   }
 }

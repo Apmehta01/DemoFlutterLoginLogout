@@ -1,10 +1,10 @@
 import 'dart:ui';
 import 'package:demoflutterloginlogout/app_screens/loginPage.dart';
 import 'package:demoflutterloginlogout/app_screens/randomUserList.dart';
+import 'package:demoflutterloginlogout/app_screens/randomUserListPagination.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'jobListScreen.dart';
+import 'randomUserList.dart';
 
   void main() {
     runApp(DashBoardScreen());
@@ -19,7 +19,7 @@ class DashBoardScreen extends StatelessWidget {
       ),
       drawer: setUpDrawer(context),
       body:  Center(
-          child: RandomUserList()
+          child: JobsListView()
       ),
     );
   }

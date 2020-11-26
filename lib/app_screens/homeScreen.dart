@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:demoflutterloginlogout/app_screens/loginPage.dart';
 import 'package:demoflutterloginlogout/app_screens/randomUserList.dart';
-import 'package:demoflutterloginlogout/app_screens/randomUserListPagination.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'randomUserList.dart';
@@ -23,6 +22,7 @@ class DashBoardScreen extends StatelessWidget {
       ),
     );
   }
+
   /**
    * Name : setUpDrawer
    * <br> Purpose : This method is for showing drawer inside the screen.

@@ -49,7 +49,7 @@ class _JobListViewState extends State<JobsListView> {
 
   /**
    * Name : getFutureBuilder
-   * <br> Purpose : This method contains loginc of Future builder.
+   * Purpose : This method contains loginc of Future builder.
    */
   FutureBuilder<List<Job>> getFutureBuilder(BuildContext context) {
     return FutureBuilder<List<Job>>(
@@ -70,7 +70,7 @@ class _JobListViewState extends State<JobsListView> {
   }
   /**
    * Name : getJobList
-   * <br> Purpose : This method is for getting data from server.
+   * Purpose : This method is for getting data from server.
    */
   Future<List<Job>> getJobList(BuildContext context) async {
     final jobListAPIURL = 'https://jsonplaceholder.typicode.com/users';
@@ -91,7 +91,7 @@ class _JobListViewState extends State<JobsListView> {
 
   /**
    * Name : setUpJobListWithSearch
-   * <br> Purpose : This method will sets up listview.
+   * Purpose : This method will sets up listview.
    */
   Widget setUpJobListWithSearch(List<Job> jobList) {
     return Container(
@@ -122,7 +122,7 @@ class _JobListViewState extends State<JobsListView> {
 
   /**
    * Name : showDataInToListView
-   * <br> Purpose : This method will showcase data inside the listview.
+   * Purpose : This method will showcase data inside the listview.
    */
   showDataInToListView() {
     if(noMatchFound){
@@ -157,7 +157,7 @@ class _JobListViewState extends State<JobsListView> {
 
   /**
    * Name : setUpTitle
-   * <br> Purpose : This method will sets up listtitle of listview.
+   * Purpose : This method will sets up listtitle of listview.
    */
   ListTile setUpTitle(String name, String email,String phone,String city,
       String website, IconData icon) => ListTile(
@@ -178,7 +178,7 @@ class _JobListViewState extends State<JobsListView> {
 
   /**
    * Name : openUserInformationDialog
-   * <br> Purpose : This method is will open dialog on listview click for showing information of the user.
+   * Purpose : This method is will open dialog on listview click for showing information of the user.
    */
   openUserInformationDialog(String name, String email,String phone,String website,String city) {
     return showDialog(
@@ -268,7 +268,7 @@ class _JobListViewState extends State<JobsListView> {
 
   /**
    * Name : onSearchTextChanged
-   * <br> Purpose : This method contains logic of search when user will input textin Textfield.
+   * Purpose : This method contains logic of search when user will input textin Textfield.
    */
   onSearchTextChanged(String text) async {
     searchResultList.clear();

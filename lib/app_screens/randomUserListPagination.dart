@@ -80,7 +80,7 @@ class _RandomUserListPaginationState extends State<RandomUserListPagination> {
 
   /**
    * Name : getRandomUser
-   * <br> Purpose : This method is for getting data from server.
+   * Purpose : This method is for getting data from server.
    */
   Future<List<RandomAPIModel>> getRandomUser(
       BuildContext context, int pageNumber) async {
@@ -114,7 +114,7 @@ class _RandomUserListPaginationState extends State<RandomUserListPagination> {
 
   /**
    * Name : getFutureBuilder
-   * <br> Purpose : This method contains loginc of Future builder.
+   * Purpose : This method contains loginc of Future builder.
    */
   Widget getFutureBuilder(Future future) {
     return FutureBuilder<List<RandomAPIModel>>(
@@ -133,7 +133,7 @@ class _RandomUserListPaginationState extends State<RandomUserListPagination> {
 
   /**
    * Name : setUpRandomUserListWithSearch
-   * <br> Purpose : This method will sets up listview.
+   * Purpose : This method will sets up listview.
    */
   Widget setUpRandomUserListWithSearch(List<RandomAPIModel> randomUserList) {
     // debugPrint('SIZE:>>>>>>> ' + randomUserList.length.toString());
@@ -163,7 +163,7 @@ class _RandomUserListPaginationState extends State<RandomUserListPagination> {
 
   /**
    * Name : displayDataIntoListView
-   * <br> Purpose : This method will showcase data inside the listview.
+   * Purpose : This method will showcase data inside the listview.
    */
   displayDataIntoListView() {
     if (noMatchFound) {
@@ -246,7 +246,7 @@ class _RandomUserListPaginationState extends State<RandomUserListPagination> {
 
   /**
    * Name : setUpTitle
-   * <br> Purpose : This method will sets up listtitle of listview.
+   * Purpose : This method will sets up listtitle of listview.
    */
   Widget setUpTitle(int index, String name, String gender, String email,
       String phone, String city, String country, String picture, String age) {
@@ -315,7 +315,7 @@ class _RandomUserListPaginationState extends State<RandomUserListPagination> {
 
   /**
    * Name : openRandomUserInformationDialog
-   * <br> Purpose : This method is will open dialog on listview click for showing information of the user.
+   * Purpose : This method is will open dialog on listview click for showing information of the user.
    */
   openRandomUserInformationDialog(
       String picture, String name, String email, String phone, String city) {
@@ -405,7 +405,7 @@ class _RandomUserListPaginationState extends State<RandomUserListPagination> {
 
   /**
    * Name : onSearchTextChanged
-   * <br> Purpose : This method contains logic of search when user will input textin Textfield.
+   * Purpose : This method contains logic of search when user will input textin Textfield.
    */
   onSearchTextChanged(String text) async {
     searchResultList.clear();
@@ -430,7 +430,7 @@ class _RandomUserListPaginationState extends State<RandomUserListPagination> {
 
   /**
    * Name : showProgressBar
-   * <br> Purpose : This method is for showing progressDialog.
+   * Purpose : This method is for showing progressDialog.
    */
   showProgressDialog() {
     progressdialog = new ProgressDialog(context);

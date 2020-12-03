@@ -60,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
 
   /**
    * Name : headerSection
-   * <br> Purpose : This method contains design of header section.
+   * Purpose : This method contains design of header section.
    */
   Widget headerSection() {
     return Container(
@@ -116,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
 
   /**
    * Name : inputSection
-   * <br> Purpose :This method contains ontains design of Textfield/Edittext section.
+   * Purpose :This method contains ontains design of Textfield/Edittext section.
    */
   Widget inputSection() {
     return Container(
@@ -185,7 +185,7 @@ class _LoginPageState extends State<LoginPage> {
 
   /**
    * Name : buttonSection
-   * <br> Purpose : contains design of button section.
+   * Purpose : contains design of button section.
    */
   Widget buttonSection() {
     AssetImage assetImage = new AssetImage('assets/images/facebook.png');
@@ -274,7 +274,7 @@ class _LoginPageState extends State<LoginPage> {
 
   /**
    * Name : headerSection
-   * <br> Purpose : contains design of bottom section.
+   * Purpose : contains design of bottom section.
    */
   Widget bottomSection() {
     return Row(
@@ -306,7 +306,7 @@ class _LoginPageState extends State<LoginPage> {
 
   /**
    * Name : performLogin
-   * <br> Purpose : contains logic of login.
+   * Purpose : contains logic of login.
    */
   Future<void> performLogin(
       [TextEditingController emailControler,
@@ -320,7 +320,7 @@ class _LoginPageState extends State<LoginPage> {
 
   /**
    * Name : showProgressBar
-   * <br> Purpose : This method is for showing progressDialog.
+   * Purpose : This method is for showing progressDialog.
    */
   showProgressDialog(){
     progressdialog = new ProgressDialog(context);

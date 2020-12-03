@@ -91,7 +91,7 @@ class _RandomUserListPaginationState extends State<RandomUserListPagination> {
         "&results=11&seed=abc";
     // final response = await http.get(jobListAPIURL);
     final response = await dio.get(jobListAPIURL);
-    debugPrint('URL:>>>>>>> ' + jobListAPIURL);
+    // debugPrint('URL:>>>>>>> ' + jobListAPIURL);
     if (response.statusCode == 200) {
       for (int i = 0; i < response.data['results'].length; i++) {
         userResponse.add(response.data['results'][i]);
@@ -136,7 +136,7 @@ class _RandomUserListPaginationState extends State<RandomUserListPagination> {
    * <br> Purpose : This method will sets up listview.
    */
   Widget setUpRandomUserListWithSearch(List<RandomAPIModel> randomUserList) {
-    debugPrint('SIZE:>>>>>>> ' + randomUserList.length.toString());
+    // debugPrint('SIZE:>>>>>>> ' + randomUserList.length.toString());
     return Container(
       margin: EdgeInsets.only(left: 10.0, right: 10.0),
       child: Column(

@@ -25,7 +25,7 @@ class LoginPostRequest {
     String responseBody = response.body;
     var jsonData=null;
     if (statusCode < 200 || statusCode >= 400 || json == null) {
-      debugPrint('BUTTON CLICKED:>>>>>>> 2'+ responseBody.toString());
+      // debugPrint('BUTTON CLICKED:>>>>>>> 2'+ responseBody.toString());
       progressdialog.hide().then((isHidden) {
         print(isHidden);
       });
@@ -41,7 +41,7 @@ class LoginPostRequest {
       ));
       throw new Exception("Error while fetching data");
     }else if(statusCode==200){
-      debugPrint('BUTTON CLICKED:>>>>>>> 3'+ responseBody.toString());
+      // debugPrint('BUTTON CLICKED:>>>>>>> 3'+ responseBody.toString());
       jsonData = json.decode(response.body);
       progressdialog.hide().then((isHidden) {
         print(isHidden);
@@ -52,7 +52,7 @@ class LoginPostRequest {
           onPressed: (){
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
             sharedPreferences.setString("token", jsonData['token']);
-            debugPrint('BUTTON CLICKED:>>>>>>> 4');
+            // debugPrint('BUTTON CLICKED:>>>>>>> 4');
            /* Navigator.pushReplacement(context, MaterialPageRoute<void>(
               builder: (BuildContext context) => MyHomescreen(),
               fullscreenDialog: true,
@@ -60,7 +60,7 @@ class LoginPostRequest {
             // Navigator.of(context).pushAndRemoveUntil(
             //     MaterialPageRoute(builder: (context) => MyHomescreen()), (Route<dynamic> route) => false);
             Navigator.popAndPushNamed(context, '/homescreen');
-            debugPrint('BUTTON CLICKED:>>>>>>> 5');
+            // debugPrint('BUTTON CLICKED:>>>>>>> 5');
           },
         ),
         content: Text("Login Sucess"),

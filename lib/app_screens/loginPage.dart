@@ -204,7 +204,7 @@ class _LoginPageState extends State<LoginPage> {
                   shape: new RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(20.0)),
                   onPressed: () async {
-                    debugPrint('BUTTON CLICKED:>>>>>>> 1');
+                    // debugPrint('BUTTON CLICKED:>>>>>>> 1');
                     setState(() {
                       /*Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(builder: (BuildContext context) => MyHomescreen()),

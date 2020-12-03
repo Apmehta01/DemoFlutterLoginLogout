@@ -55,7 +55,7 @@ class _MySplashScreen extends State<MySplashScreen> {
     String sToken="";
     sToken = sharedPreferences.getString("token");
     if(sToken!=null && sToken.trim()!=''){
-      debugPrint('TOKEN :>>>>>>> TRUE');
+      // debugPrint('TOKEN :>>>>>>> TRUE');
       Timer(Duration(seconds: 3),
               ()=>Navigator.pushReplacement(context,
               MaterialPageRoute(builder:
@@ -65,7 +65,7 @@ class _MySplashScreen extends State<MySplashScreen> {
           )
       );
     }else{
-      debugPrint('TOKEN :>>>>>>> FALSE');
+      // debugPrint('TOKEN :>>>>>>> FALSE');
       Timer(Duration(seconds: 3),
               ()=>Navigator.pushReplacement(context,
               MaterialPageRoute(builder:

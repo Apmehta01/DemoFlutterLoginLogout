@@ -284,7 +284,7 @@ class _JobListViewState extends State<JobsListView> {
         searchResultList.add(job);
     });
     setState(() {
-      debugPrint('SIZE:>>>>>>> '+searchResultList.length.toString());
+      // debugPrint('SIZE:>>>>>>> '+searchResultList.length.toString());
       if(searchResultList.length==0){
         noMatchFound=true;
       }else{

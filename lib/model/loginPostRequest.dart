@@ -37,7 +37,7 @@ class LoginPostRequest {
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
           },
         ),
-        content: Text("Login Failed"),
+        content: Text("Error while login."),
       ));
       throw new Exception("Error while fetching data");
     }else if(statusCode==200){

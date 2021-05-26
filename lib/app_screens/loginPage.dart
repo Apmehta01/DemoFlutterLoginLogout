@@ -30,8 +30,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   static final CREATE_POST_URL = 'https://reqres.in/api/register';
-  TextEditingController emailControler = new TextEditingController();
-  TextEditingController passwordControler = new TextEditingController();
+  TextEditingController emailControler = new TextEditingController(text: 'eve.holt@reqres.in');
+  TextEditingController passwordControler = new TextEditingController(text: 'pistol');
   bool isEmail = false, isPassword = false;
   ProgressDialog progressdialog;
   @override
@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           )
         ),
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
     );
   }
 

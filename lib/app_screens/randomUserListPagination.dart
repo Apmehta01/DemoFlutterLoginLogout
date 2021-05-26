@@ -74,7 +74,7 @@ class _RandomUserListPaginationState extends State<RandomUserListPagination> {
           child: getFutureBuilder(_future),
         ),
       ),
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
     );
   }
 

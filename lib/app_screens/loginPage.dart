@@ -65,11 +65,16 @@ class _LoginPageState extends State<LoginPage> {
   Widget headerSection() {
     return Container(
         margin: EdgeInsets.only(left: 20.0, right: 20.0),
+        padding: const EdgeInsets.only(top: 10.0,bottom: 10.0),
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.black,width: 2),
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+        ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              'Hello',
+              'LOGIN',
               style: TextStyle(
                   fontSize: 80.0,
                   fontWeight: FontWeight.bold,
@@ -82,10 +87,11 @@ class _LoginPageState extends State<LoginPage> {
                   ]),
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                   child: Text(
-                    'There',
+                    'HERE',
                     style: TextStyle(
                         fontSize: 80.0,
                         fontWeight: FontWeight.bold,
@@ -98,16 +104,6 @@ class _LoginPageState extends State<LoginPage> {
                         ]),
                   ),
                 ),
-                // SizedBox(width: 5.0,),
-                Container(
-                  child: Text(
-                    '.',
-                    style: TextStyle(
-                        fontSize: 80.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.lightBlue),
-                  ),
-                )
               ],
             )
           ],
